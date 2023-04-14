@@ -1,0 +1,2 @@
+model	nDCGRendle2020
+KGTORE_seed=123_e=38_bs=256_lr=0$000664750387531533_elr=0$00305727041704464_factors=64_l_w=0$00312734853526998_alpha=0$09999999999999998_beta=0$9_l_ind=0$054524737_ind_edges=0$001_n_layers=3_npr=20_criterion=entropy_loader=KGTORETSVLoader	0.309430014360697
