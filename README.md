@@ -1,8 +1,9 @@
-# KG-TORE: Tailored recommendations through knowledge-aware GNN models
+# KG-TERI
 
-This is the official implementation of the paper
-*KG-TORE: Tailored recommendations through knowledge-aware GNN models* submitted to *SIGIR Conference on Research and Development in Information Retrieval*.
+This is the official repo of the dissertation
+[*Exploiting Time and Content Information to Improve Collaborative and Knowledge-aware Recommendation*](https://drive.google.com/uc?id=1FYUNfTY7QPwGlgm3tL7M5a1LqHjay_eQ&export=download) which involves the implementation of a new *Graph Neural Network* model based on the approaches discussed in papers accepted or submitted to *SIGIR Conference on Research and Development in Information Retrieval*.
 
+Huge thanks to the [@sisinflab](https://github.com/sisinflab) team for their support.
 ## Table of Contents
 
 - [Description](#description)
@@ -11,19 +12,16 @@ This is the official implementation of the paper
   - [Installation guidelines: scenario #2](#installation-guidelines-scenario-2)
 - [Datasets](#datasets)
 - [Elliot Configuration Files](#elliot-configuration-files)
-- [Recommendation Lists](#recommendation-lists)
-- [KGTORe Parameters](#kgtore-parameters)
 - [Usage](#usage)
-  - [Reproduce Paper Results](#reproduce-paper-results)
-  - [Preprocessing](#preprocessing)
-  - [Evaluate Recommendation Lists](#evaluate-recommendation-lists)
-  - [Statistical Significance](#statistical-significance)
+  - [Matrices](#matrices)
+  - [Forwarding](#forwarding)
+  - [Reproduce Results](#reproduce-results)
 
 
 
 ## Description
 
-The code in this repository allows replicating the experimental setting described within the paper.
+The code in this repository allows replicating the experimental setting described within the dissertation.
 
 The recommenders training and evaluation procedures have been developed on the reproducibility framework **Elliot**,
 so we suggest you refer to the official GitHub 
@@ -44,7 +42,7 @@ This software has been executed on the operative system Ubuntu `18.04`.
 
 Please, make sure to have the following installed on your system:
 
-* Python `3.8.0` or later
+* Python `3.8.0`
 * PyTorch Geometric with PyTorch `1.10.2` or later
 * CUDA `10.2`
 
@@ -79,78 +77,47 @@ The datasets could be found within the directory `./data/[DATASET]/data`.
 Only for Movielens 1M, within the [directory](data/movielens/grouplens) `./data/movielens/grouplens`
 For the knowledge graphs and links please look at  `./data/[DATASET]/dbpedia`.
 
+NOTE: the dataset has been reduced to Movielens 10k with the use of `./external/models/kgteri/Movielens_prep.py`.
+Also the knowledge graph side information has been reduced to the number of users obtained from Movielens 10k for a direct and correct mapping.
+
 ## Elliot Configuration Files
 
 At `./config_files/` you may find the Elliot [configuration files](config_files) used for setting the experiments.
 
 
 The configuration files for training the models are reported as `[DATASET]_[MODEL].yml`. 
-While the best models hyperparameters are reported in the files named `[DATASET]_best_[MODEL].yml`. 
-
-## Recommendation Lists
-
-The best models recommendation lists could be found at `./results/recs`. 
-You may be use them for computing the recommendation metrics as described at [Evaluate Recommendation](#Evaluate-Recommendation-Lists)
-
-### KGTORe Parameters
-
-The following are the parameters required by KGTORe:
-- ```batch size```: training batch size;
-- ```lr```: learning rate;
-- ```elr```: features embedding learning rate;
-- ```l_w```: embedding regularization;
-- ```l_ind```: independence loss weight;
-- ```alpha```: alpha parameter;
-- ```beta```: beta parameter;
-- ```factors```: embeddings dimension;
-- ```ind_edges```: fraction of edges selected for computing the independence loss in each training batch;
-- ```n_layers```: graph convolutional network layers;
-- ```npr```: negative-positive ratio when building the decision tree;
-- ```epochs```: training epochs
+While the best models hyperparameters are reported in the files named `[DATASET]_best_[MODEL].yml`.
 
 ## Usage
+Here we describe the steps to reproduce the results presented in the dissertation. Furthermore, we provide a description of how the experiments have been configured.
 
-Here we describe the steps to reproduce the results presented in the paper. 
-Furthermore, we provide a description of how the experiments have been configured.
+### Matrices
 
-### Reproduce Paper Results
+All the R matrices containing the item-item time and content information are stored in the [directory](data/movielens/kgteri) `./data/movielens/kgteri/user_item_matrix.pk`.
+To compute the matrices with different values of k just change it in each external model's `TimeAwareProcessing.py` and uncomment the following lines in the `.external/models/[MODEL]/[MODEL].py`
+```
+# Run experiment one time to create the pickle file containing the users matrices
 
-[Here](run.py) you can find a ready-to-run Python file with all the pre-configured experiments cited in our paper.
+self.app = TimeAwareProcessing(data=self._data)
+self.app.time_mapping()
+
+```
+NOTE: the next experiment run is the one which performs the embeddings forwarding with the calculated matrix of the previous step.
+
+### Forwarding
+To perform the approach discussed in the dissertation, just change the type of forwarding in each applied model `.external/models/[MODEL]/[MODEL]Model.py` to the KGTERI Forwarding.
+
+
+
+### Reproduce Results
+
+[Here](start_experiments.py) you can find a ready-to-run Python file with all the pre-configured experiments cited in the dissertation.
 You can easily run them with the following command:
 
 ```
-python run.py
+python start_experiments.py
 ```
 
-It runs the pre-processing procedure and then trains our KGTORe model and all the baselines on three different datasets.
+NOTE: it runs the experiments with the R matrix obtained with a value of neighbours of ten, for further versions compute the new matrix as in [Matrices](##Matrices).
 The results will be stored in the folder ```results/DATASET/```.
 
-### Preprocessing
-
-If you are interested in running just the data preprocessing step, please run:
-
-```
-python preprocessing.py
-```
-
-### Evaluate Recommendation Lists
-
-For computing the recommendation metrics on the recommendation lists run the following command:
-
-```
-python compute_metrics_on_recs.py
-```
-
-Within the [file](compute_metrics_on_recs.py) it is possible to specify the directory containing the recommendation lists.
-The [default](results/recs/) solution is ```results/recs/[DATASET]```.
-
-Along with the evaluation metrics also the student's paired t-test is computed.
-
-### Statistical Significance
-
-The results statistical significance has been evaluated performing a Student's Paired t-Test. 
-The precomputed results on the best models could be found at
-[results/student_paired_t_test](results/student_paired_t_test).
-
-The paired t-test is computed during recommendation metrics computation. 
-Please, see the [evaluation](#evaluate-recommendation-lists) section to compute them.
