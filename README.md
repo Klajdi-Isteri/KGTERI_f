@@ -1,7 +1,7 @@
 # KG-TERI
 
 This is the official repo of the dissertation
-[*Exploiting Time and Content Information to Improve Collaborative and Knowledge-aware Recommendation*](https://drive.google.com/uc?id=1FYUNfTY7QPwGlgm3tL7M5a1LqHjay_eQ&export=download) which involves the implementation of a new *Graph Neural Network* model based on the approaches discussed in papers accepted or submitted to *SIGIR Conference on Research and Development in Information Retrieval*.
+[*Exploiting Time and Content Information to Improve Collaborative and Knowledge-aware Recommendation*](https://drive.google.com/uc?id=1FYUNfTY7QPwGlgm3tL7M5a1LqHjay_eQ&export=download) which involves the implementation of a new *Graph Neural Network* model based on the approaches discussed in papers submitted/accepted at *SIGIR Conference on Research and Development in Information Retrieval*.
 
 Huge thanks to the [@sisinflab](https://github.com/sisinflab) team for their support.
 ## Table of Contents
