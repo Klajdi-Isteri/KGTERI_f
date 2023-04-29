@@ -3,7 +3,8 @@
 This is the official repo of the dissertation
 [*Exploiting Time and Content Information to Improve Collaborative and Knowledge-aware Recommendation*](https://drive.google.com/uc?id=1FYUNfTY7QPwGlgm3tL7M5a1LqHjay_eQ&export=download) which involves the implementation of a new *Graph Neural Network* model based on the approaches discussed in papers submitted/accepted at *SIGIR Conference on Research and Development in Information Retrieval*.
 
-Huge thanks to the [@sisinflab](https://github.com/sisinflab) team for their support.
+Huge thanks to the [@sisinflab](https://github.com/sisinflab) team for their support. <br/>
+Huge thanks to [Jure Leskovec](https://scholar.google.com/citations?hl=en&user=Q_kKkIUAAAAJ) for his amazing course on Graph Neural Networks: [CS224W](http://snap.stanford.edu/class/cs224w-2021/) (Stanford University)
 ## Table of Contents
 
 - [Description](#description)
